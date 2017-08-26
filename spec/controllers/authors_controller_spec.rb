@@ -33,7 +33,7 @@ RSpec.describe AuthorsController, type: :controller do
   let(:valid_session) { {} }
 
   describe "GET #index" do
-    it "assigns all authors as @authors" do
+    it "assigns all authors as @author" do
       author = Author.create! valid_attributes
       get :index, params: {}, session: valid_session
       expect(assigns(:authors)).to eq([author])
@@ -51,7 +51,7 @@ RSpec.describe AuthorsController, type: :controller do
   describe "GET #new" do
     it "assigns a new author as @author" do
       get :new, params: {}, session: valid_session
-      expect(assigns(:author)).to be_a_new(Author)
+      expect(assigns(:author)).to eq(author)
     end
   end
 
@@ -73,13 +73,13 @@ RSpec.describe AuthorsController, type: :controller do
 
       it "assigns a newly created author as @author" do
         post :create, params: {author: valid_attributes}, session: valid_session
-        expect(assigns(:author)).to be_a(Author)
+        expect(assigns(:author)).to be_a(author)
         expect(assigns(:author)).to be_persisted
       end
 
       it "redirects to the created author" do
         post :create, params: {author: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(Author.last)
+        expect(response).to redirect_to(author.last)
       end
     end
 
@@ -87,7 +87,7 @@ RSpec.describe AuthorsController, type: :controller do
       it "assigns a newly created but unsaved author as @author" do
         expect {
           post :create, params: {author: invalid_attributes}, session: valid_session
-        }.to change(Author, :count).by(0)
+        }.to change(author, :count).by(0)
       end
 
       it "re-renders the 'new' template" do
@@ -104,7 +104,7 @@ RSpec.describe AuthorsController, type: :controller do
       }
 
       it "updates the requested author" do
-        author = Author.create! valid_attributes
+        author = author.create! valid_attributes
         put :update, params: {id: author.to_param, author: new_attributes}, session: valid_session
         expect(response).to redirect_to(author)
       end
